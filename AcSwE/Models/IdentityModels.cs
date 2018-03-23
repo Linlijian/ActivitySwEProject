@@ -29,5 +29,11 @@ namespace AcSwE.Models
         {
             return new ApplicationDbContext();
         }
+
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Activity> Activitys { get; set; }
+        public DbSet<Join> Joins { get; set; }
+        public DbSet<Location> Location { get; set; }
     }
 }

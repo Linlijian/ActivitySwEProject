@@ -13,6 +13,12 @@ namespace AcSwE.Models
         [Key]
         public int id { get; set; }
 
+        public string title { get; set; }
+
+        [Required]
+        public int idStd { get; set; }
+
+
         [MaxLength(255)]
         public string firstName { get; set; }
 

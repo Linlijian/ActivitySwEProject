@@ -12,9 +12,7 @@ namespace AcSwE.Models
     {
         [Key]
         public int id { get; set; }
-
-
-        [Required]
+                
         [MaxLength(255)]
         public string locationName { get; set; }
 
