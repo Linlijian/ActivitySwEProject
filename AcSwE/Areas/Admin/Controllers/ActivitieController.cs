@@ -10,105 +10,106 @@ using AcSwE.Models;
 
 namespace AcSwE.Areas.Admin.Controllers
 {
-    public class TeacherController : Controller
+    public class ActivitieController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Admin/Teacher
+        // GET: Admin/Activitie
         public ActionResult Index()
         {
-            return View(db.Teachers.ToList());
+            return View(db.Activitys.ToList());
         }
 
-        // GET: Admin/Teacher/Details/5
+        // GET: Admin/Activitie/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Teacher teacher = db.Teachers.Find(id);
-            if (teacher == null)
+            Activity activity = db.Activitys.Find(id);
+            if (activity == null)
             {
                 return HttpNotFound();
             }
-            return View(teacher);
+            return View(activity);
         }
 
-        // GET: Admin/Teacher/Create
+        // GET: Admin/Activitie/Create
         public ActionResult Create()
         {
+           
             return View();
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(HttpPostedFileBase file,[Bind(Include = "id,title,firstName,lastName,username,password,status,img")] Teacher teacher)
+        public ActionResult Create(HttpPostedFileBase file,[Bind(Include = "id,activityname,location,teacherInActivity,yearStd,yearStudy,startDate,endDate,img,locationPoint,room")] Activity activity)
         {
             if (ModelState.IsValid)
             {
-                file.SaveAs(HttpContext.Server.MapPath("~/Content/img/teacher/")
+                file.SaveAs(HttpContext.Server.MapPath("~/Content/img/activity/")
                                   + file.FileName);
-                teacher.img = file.FileName;
-                db.Teachers.Add(teacher);
+                activity.img = file.FileName;
+                db.Activitys.Add(activity);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            return View(teacher);
-        }
-
-        // GET: Admin/Teacher/Edit/5
+            
+            return View(activity);
+        }      
+               
+        // GET: Admin/Activitie/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Teacher teacher = db.Teachers.Find(id);
-            if (teacher == null)
+            Activity activity = db.Activitys.Find(id);
+            if (activity == null)
             {
                 return HttpNotFound();
             }
-            return View(teacher);
+            return View(activity);
         }
-
+                
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,title,firstName,lastName,username,password,status,img")] Teacher teacher)
+        public ActionResult Edit([Bind(Include = "id,activityname,location,teacherInActivity,yearStd,yearStudy,startDate,endDate,img,locationPoint,room")] Activity activity)
         {
             if (ModelState.IsValid)
             {
                 
-                db.Entry(teacher).State = EntityState.Modified;
+                db.Entry(activity).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(teacher);
+            return View(activity);
         }
 
-        // GET: Admin/Teacher/Delete/5
+        // GET: Admin/Activitie/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Teacher teacher = db.Teachers.Find(id);
-            if (teacher == null)
+            Activity activity = db.Activitys.Find(id);
+            if (activity == null)
             {
                 return HttpNotFound();
             }
-            return View(teacher);
+            return View(activity);
         }
 
-        // POST: Admin/Teacher/Delete/5
+        // POST: Admin/Activitie/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Teacher teacher = db.Teachers.Find(id);
-            db.Teachers.Remove(teacher);
+            Activity activity = db.Activitys.Find(id);
+            db.Activitys.Remove(activity);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -121,5 +122,6 @@ namespace AcSwE.Areas.Admin.Controllers
             }
             base.Dispose(disposing);
         }
+                
     }
 }

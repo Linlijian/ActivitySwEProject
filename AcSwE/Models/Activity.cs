@@ -21,6 +21,9 @@ namespace AcSwE.Models
         [MaxLength(255)]
         public string location { get; set; }
 
+        public string locationPoint { get; set; }
+        public string room { get; set; }
+
         [Required]
         public int teacherInActivity { get; set; }
 

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AcSwE.Models.Teacher>
+﻿@model IEnumerable<AcSwE.Models.Activity>
 
 @{
     ViewBag.Title = "Index";
@@ -13,22 +13,25 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.title)
+            @Html.DisplayNameFor(model => model.activityname)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.firstName)
+            @Html.DisplayNameFor(model => model.location)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.lastName)
+            @Html.DisplayNameFor(model => model.teacherInActivity)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.username)
+            @Html.DisplayNameFor(model => model.yearStd)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.password)
+            @Html.DisplayNameFor(model => model.yearStudy)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.status)
+            @Html.DisplayNameFor(model => model.startDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.endDate)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.img)
@@ -39,22 +42,25 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.title)
+            @Html.DisplayFor(modelItem => item.activityname)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.firstName)
+            @Html.DisplayFor(modelItem => item.location)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.lastName)
+            @Html.DisplayFor(modelItem => item.teacherInActivity)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.username)
+            @Html.DisplayFor(modelItem => item.yearStd)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.password)
+            @Html.DisplayFor(modelItem => item.yearStudy)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.status)
+            @Html.DisplayFor(modelItem => item.startDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.endDate)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.img)

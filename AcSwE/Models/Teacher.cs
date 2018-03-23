@@ -23,6 +23,17 @@ namespace AcSwE.Models
 
         public string username { get; set; }
         public string password { get; set; }
+
+        [Required]
+        public string status { get; set; }
+
         public string img { get; set; }
     }
+    public enum setStatus
+    {
+        Admin,
+        Teacher
+    }
+
+
 }
