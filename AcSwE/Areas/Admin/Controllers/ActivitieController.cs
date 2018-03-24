@@ -38,7 +38,12 @@ namespace AcSwE.Areas.Admin.Controllers
         // GET: Admin/Activitie/Create
         public ActionResult Create()
         {
-           
+            Activity a = new Activity();
+            using (db)
+            {
+                a.TeacherList = db.Teachers.ToList<Teacher>();
+            }
+            return View(a);
             return View();
         }
 

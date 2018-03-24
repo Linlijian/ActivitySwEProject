@@ -33,5 +33,7 @@ namespace AcSwE.Models
         public string endDate { get; set; }
         public string img { get; set; }
 
+        [NotMapped]
+        public List<Teacher> TeacherList { get; set; }
     }
 }
