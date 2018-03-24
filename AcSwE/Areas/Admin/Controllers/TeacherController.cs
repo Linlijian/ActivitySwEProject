@@ -52,10 +52,10 @@ namespace AcSwE.Areas.Admin.Controllers
                 teacher.img = file.FileName;
                 db.Teachers.Add(teacher);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                
             }
-
-            return View(teacher);
+            return RedirectToAction("Index", "Teacher");
+            //return View(teacher);
         }
 
         // GET: Admin/Teacher/Edit/5
@@ -82,7 +82,7 @@ namespace AcSwE.Areas.Admin.Controllers
                 
                 db.Entry(teacher).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Teacher");
             }
             return View(teacher);
         }
@@ -110,7 +110,7 @@ namespace AcSwE.Areas.Admin.Controllers
             Teacher teacher = db.Teachers.Find(id);
             db.Teachers.Remove(teacher);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Teacher");
         }
 
         protected override void Dispose(bool disposing)
