@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using AcSwE.Models;
 using System.Drawing;
 using System.IO;
+using AcSwE.Extensions;
 
 namespace AcSwE.Areas.Admin.Controllers
 {
@@ -94,12 +95,51 @@ namespace AcSwE.Areas.Admin.Controllers
                 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,activityname,location,teacherInActivity,yearStd,yearStudy,startDate,endDate,img,locationPoint,room")] Activity activity)
+        public ActionResult Edit(HttpPostedFileBase file,[Bind(Include = "id,activityname,location,teacherInActivity,yearStd,yearStudy,startDate,endDate,img,locationPoint,room")] Activity activity)
         {
             if (ModelState.IsValid)
             {
-                
-                db.Entry(activity).State = EntityState.Modified;
+
+               
+                    if (file == null)
+                {
+                    Activity aaa = db.Activitys.Find(activity.id);
+                    aaa.id = activity.id;
+                    aaa.activityname = activity.activityname.ToString();
+                    aaa.endDate = activity.endDate.ToString();
+                    aaa.startDate = activity.startDate.ToString();
+                    aaa.location = activity.location.ToString();
+                    aaa.teacherInActivity = activity.teacherInActivity;
+                    aaa.room = activity.room.ToString();
+                    aaa.locationPoint = activity.locationPoint.ToString();
+                    aaa.yearStd = activity.yearStd;
+                    aaa.yearStudy = activity.yearStudy;
+                   
+                    aaa.img = "default.jpg";
+                    db.Entry(aaa).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
+                file.SaveAs(HttpContext.Server.MapPath("~/Content/img/activity/")
+                              + file.FileName);
+                activity.img = file.FileName;
+
+                Activity aa = db.Activitys.Find(activity.id);
+                aa.id = activity.id;
+                aa.activityname = activity.activityname.ToString();
+                aa.endDate = activity.endDate.ToString();
+                aa.startDate = activity.startDate.ToString();
+                aa.location = activity.location.ToString();
+                aa.teacherInActivity = activity.teacherInActivity;
+                aa.room = activity.room.ToString();
+                aa.locationPoint = activity.locationPoint.ToString();
+                aa.yearStd = activity.yearStd;
+                aa.yearStudy = activity.yearStudy;
+
+                aa.img = file.FileName;
+                db.Entry(aa).State = EntityState.Modified;
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
