@@ -47,6 +47,14 @@ namespace AcSwE.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (file == null)
+                {
+                    teacher.img = "default.jpg";
+                    db.Teachers.Add(teacher);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
                 file.SaveAs(HttpContext.Server.MapPath("~/Content/img/teacher/")
                                   + file.FileName);
                 teacher.img = file.FileName;

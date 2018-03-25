@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AcSwE.Models;
+using System.Drawing;
+using System.IO;
 
 namespace AcSwE.Areas.Admin.Controllers
 {
@@ -44,7 +46,7 @@ namespace AcSwE.Areas.Admin.Controllers
                 a.TeacherList = db.Teachers.ToList<Teacher>();
             }
             return View(a);
-            return View();
+            
         }
 
         [HttpPost]
@@ -53,12 +55,23 @@ namespace AcSwE.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(file == null)
+                {                    
+                    activity.img = "default.jpg";
+                    db.Activitys.Add(activity);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
                 file.SaveAs(HttpContext.Server.MapPath("~/Content/img/activity/")
-                                  + file.FileName);
+                              + file.FileName);
                 activity.img = file.FileName;
                 db.Activitys.Add(activity);
                 db.SaveChanges();
                 return RedirectToAction("Index");
+
+
+
             }
             
             return View(activity);
