@@ -1,0 +1,41 @@
+﻿@model AcSwE.Models.Teacher
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Login</h2>
+@using (Html.BeginForm("Login", "Home", FormMethod.Post))
+{
+    <table>
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(Model => Model.username)
+            </td>
+            <td>
+                @Html.EditorFor(Model => Model.username)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(Model => Model.password)
+            </td>
+            <td>
+                @Html.EditorFor(Model => Model.password)
+            </td>
+        </tr>
+        <tr>            
+            <td>
+                <input type="submit" name="" value="Login"/>
+                <h2>@ViewBag.user</h2>
+            </td>
+        </tr>
+    </table>
+  
+
+}
