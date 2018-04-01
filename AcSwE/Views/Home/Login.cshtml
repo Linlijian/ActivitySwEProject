@@ -26,7 +26,7 @@
                 @Html.LabelFor(Model => Model.password)
             </td>
             <td>
-                @Html.EditorFor(Model => Model.password)
+                @Html.EditorFor(Model => Model.password, new { @class = "form-control", placeholder = "Password" , type = "password" })
             </td>
         </tr>
         <tr>            

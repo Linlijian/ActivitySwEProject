@@ -1,0 +1,16 @@
+﻿
+<ul class="nav navbar-nav navbar-right">
+    @if (@Session["user"] == null)
+    {
+        <li><a href="~/home/login">Login</a></li>
+    }
+    else
+    {
+
+        @*<li>@Html.ActionLink("Hi " + @Session["user"], "Details", "Teacher", new { id = Session["id"] })</li>*@
+        <li><a href="~/Admin/Teacher/Details/@Session["id"]">Hi @Session["user"]</a></li>
+        <li><a href="~/Admin/Manager">Manage</a></li>
+        <li><a href="~/home/logout">Logout</a></li>
+
+    }
+</ul>

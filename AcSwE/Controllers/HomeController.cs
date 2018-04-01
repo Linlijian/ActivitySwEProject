@@ -24,8 +24,8 @@ namespace AcSwE.Controllers
             using (db)
             {
                 //var user = db.Teachers.Where(x => x.username == t.username && x.password == t.password).FirstOrDefault();
-                var user = db.Teachers.Where(x => x.username == t.username).FirstOrDefault();
-                var userid = user.id;
+                var user = db.Teachers.Where(x => x.username == t.username && x.password == t.password).FirstOrDefault();
+               
                 if (user == null)
                 {
                     ViewBag.user = "Wrong username or password";
@@ -33,8 +33,10 @@ namespace AcSwE.Controllers
                 }
                 else
                 {
+                    var userid = user.id;
+                    Session["username"] = user.title + user.firstName + " " + user.lastName;
                     Session["user"] = user.firstName;
-                    Session["id"] = user.id;
+                    Session["id"] = user.id;                    
                     return RedirectToAction("Index");
                 }
             }
