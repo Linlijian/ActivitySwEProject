@@ -15,6 +15,7 @@ namespace AcSwE.Models
 
 
         public int idStd { get; set; }
+        public int idTea { get; set; }
         public int idActivity { get; set; }
     }
 }

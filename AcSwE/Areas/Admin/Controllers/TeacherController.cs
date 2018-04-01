@@ -40,8 +40,8 @@ namespace AcSwE.Areas.Admin.Controllers
         public ActionResult Create()
         {
             return View();
-        }
-        
+        }      
+    
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(HttpPostedFileBase file,[Bind(Include = "id,title,firstName,lastName,username,password,status,img")] Teacher teacher)

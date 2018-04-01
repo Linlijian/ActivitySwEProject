@@ -56,10 +56,16 @@ namespace AcSwE.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(file == null)
+                Join j = new Join();
+                if (file == null)
                 {                    
                     activity.img = "default.jpg";
+                    j.idTea = activity.teacherInActivity;
                     db.Activitys.Add(activity);
+                    db.SaveChanges();
+                    Activity aa = db.Activitys.Find(activity.id);
+                    j.idActivity = aa.id;
+                    db.Joins.Add(j);
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -67,7 +73,12 @@ namespace AcSwE.Areas.Admin.Controllers
                 file.SaveAs(HttpContext.Server.MapPath("~/Content/img/activity/")
                               + file.FileName);
                 activity.img = file.FileName;
+                j.idTea = activity.teacherInActivity;
                 db.Activitys.Add(activity);
+                db.SaveChanges();
+                Activity a = db.Activitys.Find(activity.id);
+                j.idActivity = a.id;
+                db.Joins.Add(j);
                 db.SaveChanges();
                 return RedirectToAction("Index");
 
@@ -99,7 +110,7 @@ namespace AcSwE.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                Join j = db.Joins.Find(activity.id);
                
                     if (file == null)
                 {
@@ -114,7 +125,8 @@ namespace AcSwE.Areas.Admin.Controllers
                     aaa.locationPoint = activity.locationPoint.ToString();
                     aaa.yearStd = activity.yearStd;
                     aaa.yearStudy = activity.yearStudy;
-                   
+
+                    j.idTea = activity.teacherInActivity;
                     aaa.img = "default.jpg";
                     db.Entry(aaa).State = EntityState.Modified;
                     db.SaveChanges();
@@ -136,6 +148,7 @@ namespace AcSwE.Areas.Admin.Controllers
                 aa.locationPoint = activity.locationPoint.ToString();
                 aa.yearStd = activity.yearStd;
                 aa.yearStudy = activity.yearStudy;
+                j.idTea = activity.teacherInActivity;
 
                 aa.img = file.FileName;
                 db.Entry(aa).State = EntityState.Modified;
