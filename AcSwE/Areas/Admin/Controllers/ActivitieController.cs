@@ -10,12 +10,23 @@ using AcSwE.Models;
 using System.Drawing;
 using System.IO;
 using AcSwE.Extensions;
+using System.Data.SqlClient;
+using System.Data.OleDb;
+using System.Configuration;
 
 namespace AcSwE.Areas.Admin.Controllers
 {
     public class ActivitieController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        OleDbConnection Econ;
+        private void ExcelConn(string filepath)
+        {
+            string constr = string.Format(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=""Excel 12.0 Xml;HDR=YES;""", filepath);
+
+            Econ = new OleDbConnection(constr);            
+        }
 
         // GET: Admin/Activitie
         public ActionResult Index()
@@ -46,19 +57,93 @@ namespace AcSwE.Areas.Admin.Controllers
             {
                 a.TeacherList = db.Teachers.ToList<Teacher>();
             }
+            return View(a); 
+        }
+
+        public ActionResult Add_Std()
+        {
+            Join a = new Join();
+            using (db)
+            {
+                a.StudentList = db.Students.ToList<Student>();
+            }
             return View(a);
+
+        }
+
+        public ActionResult Add_Std_withImport()
+        {
             
+            return View();
+
+        }
+
+        [HttpPost]
+        public ActionResult Add_Std_withImport(HttpPostedFileBase file)
+        {
+            string filename = Guid.NewGuid() + Path.GetExtension(file.FileName);
+            string filepath = "/Content/excelfolder/" + filename;
+            file.SaveAs(Path.Combine(Server.MapPath("/Content/excelfolder"), filename));
+            InsertExceldata(filepath, filename);
+
+
+            return View();
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Add_Std(Join join, int id)
+        {
+            if (ModelState.IsValid)
+            {
+                join.idActivity = id;
+                db.Joins.Add(join);
+                db.SaveChanges();
+                ViewBag.suss = "It's Work!!";
+                return RedirectToAction("Add_Std", new { join.idActivity });
+            }   
+            ViewBag.suss = "It's not Work!!";
+            return View(join);
+        }
+
+        private void InsertExceldata(string fileepath, string filename)
+        {
+            string fullpath = Server.MapPath("/Content/excelfolder/") + filename;
+            ExcelConn(fullpath);
+            string query = string.Format("Select * from [{0}]", "Sheet1$");
+            OleDbCommand Ecom = new OleDbCommand(query, Econ);
+            Econ.Open();
+            
+            DataSet ds = new DataSet();
+            OleDbDataAdapter oda = new OleDbDataAdapter(query, Econ);
+            Econ.Close();
+            oda.Fill(ds);
+
+            DataTable dt = ds.Tables[0];
+            SqlBulkCopy objbulk = new SqlBulkCopy(con);
+            objbulk.DestinationTableName = "StudentTemp";
+            objbulk.ColumnMappings.Add("title", "title");
+            objbulk.ColumnMappings.Add("idStd", "idStd");
+            objbulk.ColumnMappings.Add("firstName", "firstName");
+            objbulk.ColumnMappings.Add("lastName", "lastName");
+            objbulk.ColumnMappings.Add("year", "year");
+            
+            con.Open();
+            objbulk.WriteToServer(dt);
+            con.Close();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(HttpPostedFileBase file,[Bind(Include = "id,activityname,location,teacherInActivity,yearStd,yearStudy,startDate,endDate,img,locationPoint,room")] Activity activity)
+        public ActionResult Create(HttpPostedFileBase file, [Bind(Include = "id,activityname,location,teacherInActivity,yearStd,yearStudy,startDate,endDate,img,locationPoint,room")] Activity activity)
         {
             if (ModelState.IsValid)
             {
                 Join j = new Join();
                 if (file == null)
-                {                    
+                {
                     activity.img = "default.jpg";
                     j.idTea = activity.teacherInActivity;
                     db.Activitys.Add(activity);
@@ -67,9 +152,8 @@ namespace AcSwE.Areas.Admin.Controllers
                     j.idActivity = aa.id;
                     db.Joins.Add(j);
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Add_Std", new { aa.id });
                 }
-
                 file.SaveAs(HttpContext.Server.MapPath("~/Content/img/activity/")
                               + file.FileName);
                 activity.img = file.FileName;
@@ -80,15 +164,12 @@ namespace AcSwE.Areas.Admin.Controllers
                 j.idActivity = a.id;
                 db.Joins.Add(j);
                 db.SaveChanges();
-                return RedirectToAction("Index");
-
-
-
+                return RedirectToAction("Add_Std", new { a.id });
             }
-            
+
             return View(activity);
-        }      
-               
+        }
+
         // GET: Admin/Activitie/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -103,16 +184,16 @@ namespace AcSwE.Areas.Admin.Controllers
             }
             return View(activity);
         }
-                
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(HttpPostedFileBase file,[Bind(Include = "id,activityname,location,teacherInActivity,yearStd,yearStudy,startDate,endDate,img,locationPoint,room")] Activity activity)
+        public ActionResult Edit(HttpPostedFileBase file, [Bind(Include = "id,activityname,location,teacherInActivity,yearStd,yearStudy,startDate,endDate,img,locationPoint,room")] Activity activity)
         {
             if (ModelState.IsValid)
             {
                 Join j = db.Joins.Find(activity.id);
-               
-                    if (file == null)
+
+                if (file == null)
                 {
                     Activity aaa = db.Activitys.Find(activity.id);
                     aaa.id = activity.id;
@@ -193,6 +274,6 @@ namespace AcSwE.Areas.Admin.Controllers
             }
             base.Dispose(disposing);
         }
-                
+
     }
 }

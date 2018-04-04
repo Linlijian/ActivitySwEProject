@@ -32,6 +32,7 @@ namespace AcSwE.Models
 
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Student> Students { get; set; }
+        public DbSet<StudentTemp> StudentTemps { get; set; }
         public DbSet<Activity> Activitys { get; set; }
         public DbSet<Join> Joins { get; set; }
         public DbSet<Location> Location { get; set; }

@@ -44,7 +44,7 @@ namespace AcSwE.Areas.Admin.Controllers
     
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(HttpPostedFileBase file,[Bind(Include = "id,title,firstName,lastName,username,password,status,img")] Teacher teacher)
+        public ActionResult Create(HttpPostedFileBase file,Teacher teacher)
         {
             if (ModelState.IsValid)
             {
