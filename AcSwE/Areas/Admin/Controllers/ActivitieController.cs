@@ -21,11 +21,12 @@ namespace AcSwE.Areas.Admin.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         OleDbConnection Econ;
+        int idAC;
         private void ExcelConn(string filepath)
         {
             string constr = string.Format(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=""Excel 12.0 Xml;HDR=YES;""", filepath);
 
-            Econ = new OleDbConnection(constr);            
+            Econ = new OleDbConnection(constr);
         }
 
         // GET: Admin/Activitie
@@ -57,7 +58,7 @@ namespace AcSwE.Areas.Admin.Controllers
             {
                 a.TeacherList = db.Teachers.ToList<Teacher>();
             }
-            return View(a); 
+            return View(a);
         }
 
         public ActionResult Add_Std()
@@ -73,7 +74,7 @@ namespace AcSwE.Areas.Admin.Controllers
 
         public ActionResult Add_Std_withImport()
         {
-            
+
             return View();
 
         }
@@ -86,8 +87,46 @@ namespace AcSwE.Areas.Admin.Controllers
             file.SaveAs(Path.Combine(Server.MapPath("/Content/excelfolder"), filename));
             InsertExceldata(filepath, filename);
 
+            var data = (from a in db.Students
+                        join b in db.StudentTemps
+                        on a.idStd equals b.idStd
+                        select b).ToList();
+            Join j = new Join();
+            j.idActivity = idAC;
+            for(int i = 0; i < data.Count(); i++)
+            {
+                j.idStd = data[i].idStd;                
+                db.Joins.Add(j);
+                int a = data[i].id;
+                StudentTemp t = db.StudentTemps.Find(a);
+                db.StudentTemps.Remove(t);
+                db.SaveChanges();
+            }
 
-            return View();
+            var st = db.StudentTemps.ToList();
+            Student s = new Student();
+            for(int i = 0; i < st.Count(); i++)
+            {
+                s.idStd = st[i].idStd;
+                s.firstName = st[i].firstName;
+                s.lastName = st[i].lastName;
+                s.title = st[i].title;
+                s.img = st[i].img;
+                s.year = st[i].year;
+                j.idStd = st[i].idStd;
+                db.Joins.Add(j);
+                db.Students.Add(s);
+                db.SaveChanges();
+            }
+
+            for (int i = 0; i < st.Count(); i++)
+            {
+                StudentTemp t = db.StudentTemps.Find(st[i].id);
+                db.StudentTemps.Remove(t);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("index");
         }
 
 
@@ -102,8 +141,9 @@ namespace AcSwE.Areas.Admin.Controllers
                 db.Joins.Add(join);
                 db.SaveChanges();
                 ViewBag.suss = "It's Work!!";
+                idAC = join.idActivity;
                 return RedirectToAction("Add_Std", new { join.idActivity });
-            }   
+            }
             ViewBag.suss = "It's not Work!!";
             return View(join);
         }
@@ -115,7 +155,7 @@ namespace AcSwE.Areas.Admin.Controllers
             string query = string.Format("Select * from [{0}]", "Sheet1$");
             OleDbCommand Ecom = new OleDbCommand(query, Econ);
             Econ.Open();
-            
+
             DataSet ds = new DataSet();
             OleDbDataAdapter oda = new OleDbDataAdapter(query, Econ);
             Econ.Close();
@@ -129,7 +169,7 @@ namespace AcSwE.Areas.Admin.Controllers
             objbulk.ColumnMappings.Add("firstName", "firstName");
             objbulk.ColumnMappings.Add("lastName", "lastName");
             objbulk.ColumnMappings.Add("year", "year");
-            
+
             con.Open();
             objbulk.WriteToServer(dt);
             con.Close();
@@ -274,6 +314,7 @@ namespace AcSwE.Areas.Admin.Controllers
             }
             base.Dispose(disposing);
         }
+        
 
     }
 }

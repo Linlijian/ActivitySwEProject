@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 
 namespace AcSwE.Models
 {
@@ -27,5 +28,6 @@ namespace AcSwE.Models
 
         public string year { get; set; }
         public string img { get; set; }
+        public static IEnumerable<DataRow> Rows { get; internal set; }
     }
 }
