@@ -62,26 +62,7 @@ namespace AcSwE.Areas.Admin.Controllers
             return View(a);
         }
 
-        public ActionResult Add_Std()
-        {
-            Join a = new Join();
-            using (db)
-            {
-                a.StudentList = db.Students.ToList<Student>();
-            }
-            return View(a);
-
-        }
-
-        public ActionResult Add_Std_withImport()
-        {
-
-            return View();
-
-        }
-
-        [HttpPost]
-        public ActionResult Add_Std_withImport(HttpPostedFileBase file)
+        public void Add_Std_withImport(HttpPostedFileBase file,int id)
         {
             string filename = Guid.NewGuid() + Path.GetExtension(file.FileName);
             string filepath = "/Content/excelfolder/" + filename;
@@ -93,7 +74,7 @@ namespace AcSwE.Areas.Admin.Controllers
                         on a.idStd equals b.idStd
                         select b).ToList();
             Join j = new Join();
-            j.idActivity = idAC;
+            j.idActivity = id;
             for(int i = 0; i < data.Count(); i++)
             {
                 j.idStd = data[i].idStd;                
@@ -127,26 +108,7 @@ namespace AcSwE.Areas.Admin.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("index");
-        }
-
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Add_Std(Join join, int id)
-        {
-            if (ModelState.IsValid)
-            {
-                join.idActivity = id;
-                db.Joins.Add(join);
-                db.SaveChanges();
-                ViewBag.suss = "It's Work!!";
-                idAC = join.idActivity;
-                return RedirectToAction("Add_Std", new { join.idActivity });
-            }
-            ViewBag.suss = "It's not Work!!";
-            return View(join);
+           
         }
 
         private void InsertExceldata(string fileepath, string filename)
@@ -178,23 +140,25 @@ namespace AcSwE.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(HttpPostedFileBase file, [Bind(Include = "id,activityname,location,teacherInActivity,yearStd,yearStudy,startDate,endDate,img,locationPoint,room")] Activity activity)
+        public ActionResult Create(HttpPostedFileBase xlnx, HttpPostedFileBase file, [Bind(Include = "id,activityname,location,teacherInActivity,yearStd,yearStudy,startDate,endDate,img,locationPoint,room")] Activity activity)
         {
             if (ModelState.IsValid)
             {
                 Join j = new Join();
                 if (file == null)
-                {
+                {                   
                     activity.img = "default.jpg";
                     j.idTea = activity.teacherInActivity;
                     db.Activitys.Add(activity);
                     db.SaveChanges();
                     Activity aa = db.Activitys.Find(activity.id);
                     j.idActivity = aa.id;
+                    Add_Std_withImport(xlnx, aa.id);
                     db.Joins.Add(j);
                     db.SaveChanges();
-                    return RedirectToAction("Add_Std", new { aa.id });
+                    return RedirectToAction("index");
                 }
+                
                 file.SaveAs(HttpContext.Server.MapPath("~/Content/img/activity/")
                               + file.FileName);
                 activity.img = file.FileName;
@@ -203,9 +167,10 @@ namespace AcSwE.Areas.Admin.Controllers
                 db.SaveChanges();
                 Activity a = db.Activitys.Find(activity.id);
                 j.idActivity = a.id;
+                Add_Std_withImport(xlnx, a.id);
                 db.Joins.Add(j);
                 db.SaveChanges();
-                return RedirectToAction("Add_Std", new { a.id });
+                return RedirectToAction("index");
             }
 
             return View(activity);
