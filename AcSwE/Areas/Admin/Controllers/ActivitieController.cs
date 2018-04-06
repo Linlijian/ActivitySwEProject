@@ -56,8 +56,9 @@ namespace AcSwE.Areas.Admin.Controllers
             Activity a = new Activity();
             using (db)
             {
-                a.TeacherList = db.Teachers.ToList<Teacher>();
-            }
+                a.TeacherList = db.Teachers.ToList<Teacher>();               
+            }           
+            
             return View(a);
         }
 
@@ -218,6 +219,11 @@ namespace AcSwE.Areas.Admin.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Activity activity = db.Activitys.Find(id);
+            activity.TeacherList = db.Teachers.ToList<Teacher>();
+            //using (db)
+            //{
+            //    activity.TeacherList = db.Teachers.ToList<Teacher>();
+            //}
             if (activity == null)
             {
                 return HttpNotFound();

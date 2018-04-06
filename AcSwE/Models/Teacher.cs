@@ -31,6 +31,8 @@ namespace AcSwE.Models
         public string status { get; set; }
 
         public string img { get; set; }
+
+        public string FullName { get { return title + firstName + " " + lastName; } }
         
 
     }
