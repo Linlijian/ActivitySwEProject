@@ -185,10 +185,6 @@ namespace AcSwE.Areas.Admin.Controllers
             }
             Activity activity = db.Activitys.Find(id);
             activity.TeacherList = db.Teachers.ToList<Teacher>();
-            //using (db)
-            //{
-            //    activity.TeacherList = db.Teachers.ToList<Teacher>();
-            //}
             if (activity == null)
             {
                 return HttpNotFound();
@@ -222,7 +218,8 @@ namespace AcSwE.Areas.Admin.Controllers
                     aaa.img = "default.jpg";
                     db.Entry(aaa).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                   // EditStd(aaa.id);
+                    return RedirectToAction("EditStd",new { aaa.id });
                 }
 
                 file.SaveAs(HttpContext.Server.MapPath("~/Content/img/activity/")
@@ -250,6 +247,34 @@ namespace AcSwE.Areas.Admin.Controllers
             }
             return View(activity);
         }
+
+        public ActionResult EditStd(int ?id)
+        {
+            var data = (from a in db.Joins where a.idActivity == id select a).ToList();
+            StudentTemp t = new StudentTemp();
+            for(int i = 0; i < data.Count(); i++)
+            {
+                t.idStd = data[i].idStd;
+                db.StudentTemps.Add(t);
+                db.SaveChanges();
+            }
+             ViewBag.std = (from q in db.StudentTemps join w in db.Students on q.idStd equals w.idStd select w).ToList();
+             //var std = (from q in db.StudentTemps join w in db.Students on q.idStd equals w.idStd select w).ToList();
+
+            int j = 0;
+            return View();
+           
+        }
+
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult EditStd()
+        //{
+  
+        //    return View();
+
+        //}
 
         // GET: Admin/Activitie/Delete/5
         public ActionResult Delete(int? id)
