@@ -6,11 +6,21 @@
     }
     else
     {
+        if (@Session["status"] == null)
+        {
+            <li><a href="~/Admin/Teacher/Details/@Session["id"]">Hi @Session["username"]</a></li>
+            <li><a href="~/Admin/Activitie">Activity</a></li>
+            <li><a href="~/home/logout">Logout</a></li>
+        }
+        else
+        {
+            @*<li>@Html.ActionLink("Hi " + @Session["user"], "Details", "Teacher", new { id = Session["id"] })</li>*@
+            <li><a href="~/Admin/Teacher/Details/@Session["id"]">Hi @Session["username"]</a></li>
+            <li><a href="~/Admin/Teacher/Index">Teacher</a></li>
+            <li><a href="~/Admin/Activitie/Index">Activity</a></li>
+            <li><a href="~/home/logout">Logout</a></li>
+        }
 
-        @*<li>@Html.ActionLink("Hi " + @Session["user"], "Details", "Teacher", new { id = Session["id"] })</li>*@
-        <li><a href="~/Admin/Teacher/Details/@Session["id"]">Hi @Session["user"]</a></li>
-        <li><a href="~/Admin/Manager">Manage</a></li>
-        <li><a href="~/home/logout">Logout</a></li>
 
     }
 </ul>

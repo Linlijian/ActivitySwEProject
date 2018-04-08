@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using AcSwE.Models;
+using System;
 
 namespace AcSwE.Controllers
 {
@@ -34,9 +35,18 @@ namespace AcSwE.Controllers
                 else
                 {
                     var userid = user.id;
-                    Session["username"] = user.title + user.firstName + " " + user.lastName;
-                    Session["user"] = user.firstName;
-                    Session["id"] = user.id;                    
+                    Session["username"] = user.firstName;                    
+                    Session["user"] = user.status;
+                    if(user.status == "Admin     ")
+                    {
+                        Session["status"] = user.status;
+                    }
+                    else
+                    {
+                        Session["status"] = null;
+                    }
+                    Session["id"] = user.id;
+                    Session["uel"] = Request.Url.GetLeftPart(UriPartial.Authority);
                     return RedirectToAction("Index");
                 }
             }

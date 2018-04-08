@@ -18,6 +18,13 @@ namespace AcSwE.Areas.Admin.Controllers
         // GET: Admin/Teacher
         public ActionResult Index()
         {
+            var a = Session["status"];
+            var aa = Session["uel"];
+            string url = (string)(aa);
+            if (a == null)
+            {
+                return Redirect(url);
+            }
             return View(db.Teachers.ToList());
         }
 
