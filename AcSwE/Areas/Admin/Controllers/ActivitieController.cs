@@ -147,25 +147,7 @@ namespace AcSwE.Areas.Admin.Controllers
             con.Open();
             objbulk.WriteToServer(dt);
             con.Close();
-        }
-
-        public void Edit_Std_withImport(HttpPostedFileBase file, int id)
-        {
-            string filename = Guid.NewGuid() + Path.GetExtension(file.FileName);
-            string filepath = "/Content/excelfolder/" + filename;
-            file.SaveAs(Path.Combine(Server.MapPath("/Content/excelfolder"), filename));
-            InsertExceldata(filepath, filename);
-
-            var data = (from a in db.Joins join s in db.StudentTemps on a.idStd equals s.idStd select s).ToList();
-            //del equals
-            for(int i = 0; i < data.Count(); i++)
-            {
-                StudentTemp t = db.StudentTemps.Find(data[i].id);
-                db.StudentTemps.Remove(t);
-                db.SaveChanges();
-            }
-
-        }
+        }     
 
         [HttpPost]
         [ValidateAntiForgeryToken]
