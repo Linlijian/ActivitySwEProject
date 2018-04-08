@@ -37,6 +37,14 @@ namespace AcSwE.Areas.Admin.Controllers
             //    return Redirect(baseUrl);           
             return View(student);
         }
+        
+        [HttpPost]
+        public ActionResult callBack(string baseUrl)
+        {
+            if(baseUrl != null)
+                 return Redirect(baseUrl);
+            return RedirectToAction("Index");
+        }
 
         // GET: Admin/Student/Create
         public ActionResult Create()
@@ -90,7 +98,7 @@ namespace AcSwE.Areas.Admin.Controllers
                 db.SaveChanges();
                 if(baseUrl != null)
                     return Redirect(baseUrl);
-                return Redirect(baseUrl);
+                return RedirectToAction("Index");
             }
             return View(student);
         }

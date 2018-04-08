@@ -285,7 +285,7 @@ namespace AcSwE.Areas.Admin.Controllers
         public ActionResult DetailsStd(int? id, int Acid)
         {
             string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority +
-     Request.ApplicationPath.TrimEnd('/') + "/" + "Admin/Activitie/DetailsStd/" + Acid;
+     Request.ApplicationPath.TrimEnd('/') + "/" + "Admin/Activitie/EditStd/" + Acid;
             return RedirectToAction("Details", "Student", new { id, baseUrl });
         }
         public ActionResult DeleteStd(int? id, int Acid)
