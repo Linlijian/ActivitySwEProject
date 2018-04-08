@@ -21,7 +21,7 @@ namespace AcSwE.Areas.Admin.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         OleDbConnection Econ;
-        int idAC;
+        
         private void ExcelConn(string filepath)
         {
             string constr = string.Format(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=""Excel 12.0 Xml;HDR=YES;""", filepath);
@@ -62,52 +62,63 @@ namespace AcSwE.Areas.Admin.Controllers
             return View(a);
         }
 
-        public void Add_Std_withImport(HttpPostedFileBase file,int id)
+        public void Add_Std_withImport(HttpPostedFileBase file,int id,int Edit)
         {
             string filename = Guid.NewGuid() + Path.GetExtension(file.FileName);
             string filepath = "/Content/excelfolder/" + filename;
             file.SaveAs(Path.Combine(Server.MapPath("/Content/excelfolder"), filename));
             InsertExceldata(filepath, filename);
 
-            var data = (from a in db.Students
-                        join b in db.StudentTemps
-                        on a.idStd equals b.idStd
-                        select b).ToList();
-            Join j = new Join();
-            j.idActivity = id;
-            for(int i = 0; i < data.Count(); i++)
+            if(Edit != 0)
             {
-                j.idStd = data[i].idStd;                
-                db.Joins.Add(j);
-                int a = data[i].id;
-                StudentTemp t = db.StudentTemps.Find(a);
-                db.StudentTemps.Remove(t);
-                db.SaveChanges();
+                var data2 = (from a in db.Joins join ss in db.StudentTemps on a.idStd equals ss.idStd where a.idActivity == Edit select ss).ToList();
+                //del equals
+                for (int i = 0; i < data2.Count(); i++)
+                {
+                    StudentTemp t = db.StudentTemps.Find(data2[i].id);
+                    db.StudentTemps.Remove(t);
+                    db.SaveChanges();
+                }
             }
+                var data = (from a in db.Students
+                            join b in db.StudentTemps
+                            on a.idStd equals b.idStd
+                            select b).ToList();
+                Join j = new Join();
+                j.idActivity = id;
+                for (int i = 0; i < data.Count(); i++)
+                {
+                    j.idStd = data[i].idStd;
+                    db.Joins.Add(j);
+                    int a = data[i].id;
+                    StudentTemp t = db.StudentTemps.Find(a);
+                    db.StudentTemps.Remove(t);
+                    db.SaveChanges();
+                }
 
-            var st = db.StudentTemps.ToList();
-            Student s = new Student();
-            for(int i = 0; i < st.Count(); i++)
-            {
-                s.idStd = st[i].idStd;
-                s.firstName = st[i].firstName;
-                s.lastName = st[i].lastName;
-                s.title = st[i].title;
-                s.img = st[i].img;
-                s.year = st[i].year;
-                j.idStd = st[i].idStd;
-                db.Joins.Add(j);
-                db.Students.Add(s);
-                db.SaveChanges();
-            }
+                var st = db.StudentTemps.ToList();
+                Student s = new Student();
+                for (int i = 0; i < st.Count(); i++)
+                {
+                    s.idStd = st[i].idStd;
+                    s.firstName = st[i].firstName;
+                    s.lastName = st[i].lastName;
+                    s.title = st[i].title;
+                    s.img = st[i].img;
+                    s.year = st[i].year;
+                    j.idStd = st[i].idStd;
+                    db.Joins.Add(j);
+                    db.Students.Add(s);
+                    db.SaveChanges();
+                }
 
-            for (int i = 0; i < st.Count(); i++)
-            {
-                StudentTemp t = db.StudentTemps.Find(st[i].id);
-                db.StudentTemps.Remove(t);
-                db.SaveChanges();
-            }
-
+                for (int i = 0; i < st.Count(); i++)
+                {
+                    StudentTemp t = db.StudentTemps.Find(st[i].id);
+                    db.StudentTemps.Remove(t);
+                    db.SaveChanges();
+                }
+                       
            
         }
 
@@ -138,6 +149,24 @@ namespace AcSwE.Areas.Admin.Controllers
             con.Close();
         }
 
+        public void Edit_Std_withImport(HttpPostedFileBase file, int id)
+        {
+            string filename = Guid.NewGuid() + Path.GetExtension(file.FileName);
+            string filepath = "/Content/excelfolder/" + filename;
+            file.SaveAs(Path.Combine(Server.MapPath("/Content/excelfolder"), filename));
+            InsertExceldata(filepath, filename);
+
+            var data = (from a in db.Joins join s in db.StudentTemps on a.idStd equals s.idStd select s).ToList();
+            //del equals
+            for(int i = 0; i < data.Count(); i++)
+            {
+                StudentTemp t = db.StudentTemps.Find(data[i].id);
+                db.StudentTemps.Remove(t);
+                db.SaveChanges();
+            }
+
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(HttpPostedFileBase xlnx, HttpPostedFileBase file, [Bind(Include = "id,activityname,location,teacherInActivity,yearStd,yearStudy,startDate,endDate,img,locationPoint,room")] Activity activity)
@@ -145,6 +174,7 @@ namespace AcSwE.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 Join j = new Join();
+                int Edit = 0;
                 if (file == null)
                 {                   
                     activity.img = "default.jpg";
@@ -153,7 +183,8 @@ namespace AcSwE.Areas.Admin.Controllers
                     db.SaveChanges();
                     Activity aa = db.Activitys.Find(activity.id);
                     j.idActivity = aa.id;
-                    Add_Std_withImport(xlnx, aa.id);
+                    if (xlnx != null)
+                        Add_Std_withImport(xlnx, aa.id,Edit);
                     db.Joins.Add(j);
                     db.SaveChanges();
                     return RedirectToAction("index");
@@ -167,7 +198,8 @@ namespace AcSwE.Areas.Admin.Controllers
                 db.SaveChanges();
                 Activity a = db.Activitys.Find(activity.id);
                 j.idActivity = a.id;
-                Add_Std_withImport(xlnx, a.id);
+                if (xlnx != null)
+                    Add_Std_withImport(xlnx, a.id, Edit);
                 db.Joins.Add(j);
                 db.SaveChanges();
                 return RedirectToAction("index");
@@ -194,62 +226,50 @@ namespace AcSwE.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(HttpPostedFileBase file, [Bind(Include = "id,activityname,location,teacherInActivity,yearStd,yearStudy,startDate,endDate,img,locationPoint,room")] Activity activity)
+        public ActionResult Edit(HttpPostedFileBase xlnx, HttpPostedFileBase file, [Bind(Include = "id,activityname,location,teacherInActivity,yearStd,yearStudy,startDate,endDate,img,locationPoint,room")] Activity activity)
         {
             if (ModelState.IsValid)
-            {
-                Join j = db.Joins.Find(activity.id);
-
+            {               
+                var q = (from w in db.Joins where w.idActivity == activity.id select w).ToList();
+                Join j = new Join();
+                int id = activity.id;
+                int Edit = activity.id;
                 if (file == null)
                 {
-                    Activity aaa = db.Activitys.Find(activity.id);
-                    aaa.id = activity.id;
-                    aaa.activityname = activity.activityname.ToString();
-                    aaa.endDate = activity.endDate.ToString();
-                    aaa.startDate = activity.startDate.ToString();
-                    aaa.location = activity.location.ToString();
-                    aaa.teacherInActivity = activity.teacherInActivity;
-                    aaa.room = activity.room.ToString();
-                    aaa.locationPoint = activity.locationPoint.ToString();
-                    aaa.yearStd = activity.yearStd;
-                    aaa.yearStudy = activity.yearStudy;
-
+                    activity.img = "default.jpg";                    
+                    j = db.Joins.Find(q[q.Count() - 1].id);
                     j.idTea = activity.teacherInActivity;
-                    aaa.img = "default.jpg";
-                    db.Entry(aaa).State = EntityState.Modified;
+                    db.Entry(activity).State = EntityState.Modified;
                     db.SaveChanges();
-                   // EditStd(aaa.id);
-                    return RedirectToAction("EditStd",new { aaa.id });
+                    Activity aa = db.Activitys.Find(activity.id);
+                    if (xlnx != null)
+                        Add_Std_withImport(xlnx, id, Edit);
+                    db.Entry(j).State = EntityState.Modified;
+                    db.SaveChanges();
+                   
+                    return RedirectToAction("EditStd", new { id });
                 }
 
                 file.SaveAs(HttpContext.Server.MapPath("~/Content/img/activity/")
                               + file.FileName);
                 activity.img = file.FileName;
-
-                Activity aa = db.Activitys.Find(activity.id);
-                aa.id = activity.id;
-                aa.activityname = activity.activityname.ToString();
-                aa.endDate = activity.endDate.ToString();
-                aa.startDate = activity.startDate.ToString();
-                aa.location = activity.location.ToString();
-                aa.teacherInActivity = activity.teacherInActivity;
-                aa.room = activity.room.ToString();
-                aa.locationPoint = activity.locationPoint.ToString();
-                aa.yearStd = activity.yearStd;
-                aa.yearStudy = activity.yearStudy;
+                j = db.Joins.Find(q[q.Count() - 1].id);
                 j.idTea = activity.teacherInActivity;
-
-                aa.img = file.FileName;
-                db.Entry(aa).State = EntityState.Modified;
-
+                db.Entry(activity).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                Activity a = db.Activitys.Find(activity.id);
+                if (xlnx != null)
+                    Add_Std_withImport(xlnx, id, Edit);
+                db.Entry(j).State = EntityState.Modified;
+                db.SaveChanges();
+               
+                return RedirectToAction("EditStd" ,new { id });
             }
             return View(activity);
         }
 
         public ActionResult EditStd(int ?id)
-        {
+        {           
             var data = (from a in db.Joins where a.idActivity == id select a).ToList();
             StudentTemp t = new StudentTemp();
             for(int i = 0; i < data.Count(); i++)
@@ -259,22 +279,39 @@ namespace AcSwE.Areas.Admin.Controllers
                 db.SaveChanges();
             }
              ViewBag.std = (from q in db.StudentTemps join w in db.Students on q.idStd equals w.idStd select w).ToList();
-             //var std = (from q in db.StudentTemps join w in db.Students on q.idStd equals w.idStd select w).ToList();
-
-            int j = 0;
+            //var std = (from q in db.StudentTemps join w in db.Students on q.idStd equals w.idStd select w).ToList();
+            ViewBag.acid = id;
+            var temp = db.StudentTemps.ToList();
+            StudentTemp std = new StudentTemp();
+            for (int i = 0; i < temp.Count(); i++)
+            {
+                std = db.StudentTemps.Find(temp[i].id);
+                db.StudentTemps.Remove(std);
+                db.SaveChanges();
+            }
             return View();
            
         }
 
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult EditStd()
-        //{
-  
-        //    return View();
-
-        //}
+        public ActionResult EditStds(int? id, int Acid)
+        {
+            // string baseUrl = Request.Url.GetLeftPart(UriPartial.Authority);
+            string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority +
+     Request.ApplicationPath.TrimEnd('/') + "/" + "Admin/Activitie/EditStd/" + Acid;
+            return RedirectToAction("Edit", "Student",new { id , baseUrl});
+        }
+        public ActionResult DetailsStd(int? id, int Acid)
+        {
+            string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority +
+     Request.ApplicationPath.TrimEnd('/') + "/" + "Admin/Activitie/DetailsStd/" + Acid;
+            return RedirectToAction("Details", "Student", new { id, baseUrl });
+        }
+        public ActionResult DeleteStd(int? id, int Acid)
+        {
+            string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority +
+     Request.ApplicationPath.TrimEnd('/') + "/" + "Admin/Activitie/EditStd/" + Acid;
+            return RedirectToAction("del", "Student", new { id, baseUrl });
+        }
 
         // GET: Admin/Activitie/Delete/5
         public ActionResult Delete(int? id)

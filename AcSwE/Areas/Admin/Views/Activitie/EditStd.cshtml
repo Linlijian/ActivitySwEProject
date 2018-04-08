@@ -38,9 +38,15 @@
             </td>        
 
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = @a.id }) |
-                @Html.ActionLink("Details", "Details", new { id = @a.id }) |
-                @Html.ActionLink("Delete", "DeleteStd", new { id = @a.id })
+                @Html.ActionLink("Edit", "EditStds", new { id = @a.id , Acid = ViewBag.acid }) |
+                @Html.ActionLink("Details", "DetailsStd", new { id = @a.id, Acid = ViewBag.acid }) |
+                @Html.ActionLink("Delete", "DeleteStd", new { id = @a.id, Acid = ViewBag.acid })
             </td>
         </tr>
     }
+</table>
+
+<div>
+    @Html.ActionLink("Save Change", "Index") | 
+    @*@Html.ActionLink("Add Student with import .xlxs", "Index")*@
+</div>
