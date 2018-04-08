@@ -76,7 +76,7 @@ namespace AcSwE.Areas.Admin.Controllers
 
         // GET: Admin/Teacher/Edit/5
         public ActionResult Edit(int? id)
-        {
+        {            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -91,14 +91,25 @@ namespace AcSwE.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,title,firstName,lastName,username,password,status,img")] Teacher teacher)
+        public ActionResult Edit(HttpPostedFileBase file,[Bind(Include = "id,title,firstName,lastName,username,password,status,img")] Teacher teacher)
         {
             if (ModelState.IsValid)
             {
-                
+                if(file == null)
+                {
+                    //teacher.img = "default.jpg";
+                    db.Entry(teacher).State = EntityState.Modified;
+                    db.SaveChanges();
+                    Session["username"] = teacher.firstName;
+                    return RedirectToAction("Index");
+                }
+                file.SaveAs(HttpContext.Server.MapPath("~/Content/img/teacher/")
+                                 + file.FileName);
+                teacher.img = file.FileName;
                 db.Entry(teacher).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index", "Teacher");
+                Session["username"] = teacher.firstName;
+                return RedirectToAction("Index");
             }
             return View(teacher);
         }
@@ -106,6 +117,13 @@ namespace AcSwE.Areas.Admin.Controllers
         // GET: Admin/Teacher/Delete/5
         public ActionResult Delete(int? id)
         {
+            var a = Session["status"];
+            var aa = Session["uel"];
+            string url = (string)(aa);
+            if (a == null)
+            {
+                return Redirect(url);
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

@@ -242,7 +242,6 @@
     <Content Include="Areas\Admin\Views\Teacher\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Teacher\Delete.cshtml" />
     <Content Include="Areas\Admin\Views\Teacher\Details.cshtml" />
-    <Content Include="Areas\Admin\Views\Teacher\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Teacher\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Manager\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
@@ -256,6 +255,7 @@
     <Content Include="Areas\Admin\Views\Student\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Student\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Student\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Teacher\Edit.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

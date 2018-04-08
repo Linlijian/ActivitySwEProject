@@ -37,7 +37,7 @@ namespace AcSwE.Controllers
                     var userid = user.id;
                     Session["username"] = user.firstName;                    
                     Session["user"] = user.status;
-                    if(user.status == "Admin     ")
+                    if(user.status == "Admin")
                     {
                         Session["status"] = user.status;
                     }
