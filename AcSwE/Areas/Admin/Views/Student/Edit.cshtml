@@ -7,10 +7,11 @@
 
 <h2>Edit</h2>
 
-@using (Html.BeginForm(new { baseUrl = ViewBag.baseUrl }))
-{
+@using (Html.BeginForm("Edit", "Student", null, FormMethod.Post,
+                              new { enctype = "multipart/form-data", baseUrl = ViewBag.baseUrl }))
+    {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Student</h4>
         <hr />
@@ -60,11 +61,9 @@
         <div class="form-group">
             @Html.LabelFor(model => model.img, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.img, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.img, "", new { @class = "text-danger" })
+                <input id="Img" title="Upload a product image" type="file" name="file" />
             </div>
         </div>
-
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save or Exit" class="btn btn-default" />

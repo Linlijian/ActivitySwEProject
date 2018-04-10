@@ -51,16 +51,23 @@ namespace AcSwE.Areas.Admin.Controllers
         {
             return View();
         }
-
-        // POST: Admin/Student/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+              
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,title,idStd,firstName,lastName,year,img")] Student student)
+        public ActionResult Create(HttpPostedFileBase file,[Bind(Include = "id,title,idStd,firstName,lastName,year,img")] Student student)
         {
             if (ModelState.IsValid)
             {
+                if(file == null)
+                {
+                    student.img = "default.jpg";
+                    db.Students.Add(student);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                file.SaveAs(HttpContext.Server.MapPath("~/Content/img/student/")
+                                 + file.FileName);
+                student.img = file.FileName;
                 db.Students.Add(student);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -84,16 +91,33 @@ namespace AcSwE.Areas.Admin.Controllers
             ViewBag.baseUrl = baseUrl;
             return View(student);
         }
-
-        // POST: Admin/Student/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+               
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(string baseUrl, [Bind(Include = "id,title,idStd,firstName,lastName,year,img")] Student student)
+        public ActionResult Edit(HttpPostedFileBase file,string baseUrl,Student student)
         {
             if (ModelState.IsValid)
             {
+                if(file == null)
+                {
+                    Student s = db.Students.Find(student.id);
+                    
+                    s.id = student.id;
+                    s.firstName = student.firstName;
+                    s.lastName = student.lastName;
+                    s.year = student.year;
+                    //s.img = student.img;
+                    s.title = student.title;
+                             
+                    db.Entry(s).State = EntityState.Modified;
+                    db.SaveChanges();
+                    if (baseUrl != null)
+                        return Redirect(baseUrl);
+                    return RedirectToAction("Index");
+                }
+                file.SaveAs(HttpContext.Server.MapPath("~/Content/img/student/")
+                                + file.FileName);
+                student.img = file.FileName;
                 db.Entry(student).State = EntityState.Modified;
                 db.SaveChanges();
                 if(baseUrl != null)
