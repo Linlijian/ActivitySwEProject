@@ -43,6 +43,27 @@ namespace AcSwE.Areas.Admin.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Activity activity = db.Activitys.Find(id);
+            var data = (from a in db.Joins where a.idActivity == id select a).ToList();
+            StudentTemp t = new StudentTemp();
+            for (int i = 0; i < data.Count(); i++)
+            {
+                t.idStd = data[i].idStd;
+                db.StudentTemps.Add(t);
+                db.SaveChanges();
+            }
+
+            ViewBag.std = (from q in db.StudentTemps join w in db.Students on q.idStd equals w.idStd select w).ToList();
+            
+            ViewBag.acid = id;
+
+            var temp = db.StudentTemps.ToList();
+            StudentTemp std = new StudentTemp();
+            for (int i = 0; i < temp.Count(); i++)
+            {
+                std = db.StudentTemps.Find(temp[i].id);
+                db.StudentTemps.Remove(std);
+                db.SaveChanges();
+            }
             if (activity == null)
             {
                 return HttpNotFound();
