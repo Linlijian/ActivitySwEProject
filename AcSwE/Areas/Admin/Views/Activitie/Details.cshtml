@@ -7,88 +7,49 @@
 
 <h2>Details</h2>
 
-<div>
-    <h4>Activity</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.activityname)
-        </dt>
+<div class="row alert alert-info">
+    <div class="text-center">
+        <img src="~/Content/img/teacher/@Html.DisplayFor(model => model.img)" class="img-fluid rounded" alt="Responsive image">
+    </div>
+</div>
 
-        <dd>
-            @Html.DisplayFor(model => model.activityname)
-        </dd>
+<div class="row alert alert-info">
+    <div class="col-md-12">
+        <h4>@Html.DisplayNameFor(model => model.activityname) : @Html.DisplayFor(model => model.activityname)</h4>
+    </div>    
+</div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.location)
-        </dt>
+<div class="row alert alert-info">
+    <div class="col-md-4">
+        <h4>@Html.DisplayNameFor(model => model.location) : @Html.DisplayFor(model => model.location)</h4>
+    </div>
+    <div class="col-md-4">
+        <h4>@Html.DisplayNameFor(model => model.locationPoint) : @Html.DisplayFor(model => model.locationPoint)</h4>
+    </div>
+    <div class="col-md-4">
+        <h4>@Html.DisplayNameFor(model => model.room) : @Html.DisplayFor(model => model.room)</h4>
+    </div>
+</div>
 
-        <dd>
-            @Html.DisplayFor(model => model.location)
-        </dd>
+<div class="row alert alert-info">
+    <div class="col-md-3">
+        <h4>@Html.DisplayNameFor(model => model.yearStd) : @Html.DisplayFor(model => model.yearStd)</h4>
+    </div>
+    <div class="col-md-3">
+        <h4>@Html.DisplayNameFor(model => model.yearStudy) : @Html.DisplayFor(model => model.yearStudy)</h4>
+    </div>
+    <div class="col-md-3">
+        <h4>@Html.DisplayNameFor(model => model.startDate) : @Html.DisplayFor(model => model.startDate)</h4>
+    </div>
+    <div class="col-md-3" >
+        <h4>@Html.DisplayNameFor(model => model.endDate) : @Html.DisplayFor(model => model.endDate)</h4>
+    </div>
+</div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.locationPoint)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.locationPoint)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.room)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.room)
-        </dd>
-
-        @*<dt>
-            @Html.DisplayNameFor(model => model.teacherInActivity)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.teacherInActivity)
-        </dd>*@
-
-        <dt>
-            @Html.DisplayNameFor(model => model.yearStd)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.yearStd)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.yearStudy)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.yearStudy)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.startDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.startDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.endDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.endDate)
-        </dd>
-
-       
-        <dd>            
-            <img src="~/Content/img/activity/@Html.DisplayFor(model => model.img)" width="40%" />
-        </dd>
-
-    </dl>
+<div class="row alert alert-info">
+    <div class="col-md-12">
+        <h4>@Html.DisplayNameFor(model => model.teacherInActivity) : @Html.DisplayFor(model => model.teacherInActivity)</h4>
+    </div>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
