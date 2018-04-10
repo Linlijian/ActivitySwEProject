@@ -42,6 +42,8 @@ namespace AcSwE.Models
         public string endDate { get; set; }
         [Display(Name = "Image")]
         public string img { get; set; }
+        [Display(Name = "Detail")]
+        public string detail { get; set; }
 
         [NotMapped]
         public List<Teacher> TeacherList { get; set; }
