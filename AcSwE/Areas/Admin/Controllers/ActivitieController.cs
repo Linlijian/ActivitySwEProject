@@ -229,20 +229,33 @@ namespace AcSwE.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(HttpPostedFileBase xlnx, HttpPostedFileBase file, [Bind(Include = "id,activityname,location,teacherInActivity,yearStd,yearStudy,startDate,endDate,img,locationPoint,room,detail")] Activity activity)
+        public ActionResult Edit(HttpPostedFileBase xlnx, HttpPostedFileBase file, Activity activity)
         {
             if (ModelState.IsValid)
-            {               
+            {
+                //id,activityname,location,teacherInActivity,yearStd,yearStudy,startDate,endDate,img,locationPoint,room,detail
                 var q = (from w in db.Joins where w.idActivity == activity.id select w).ToList();
                 Join j = new Join();
                 int id = activity.id;
                 int Edit = activity.id;
                 if (file == null)
                 {
-                    activity.img = "default.jpg";                    
+                    //activity.img = "default.jpg";  
+                    Activity ac = db.Activitys.Find(activity.id);
+                    ac.activityname = activity.activityname;
+                    ac.location = activity.location;
+                    ac.teacherInActivity = activity.teacherInActivity;
+                    ac.yearStd = activity.yearStd;
+                    ac.yearStudy = activity.yearStudy;
+                    ac.startDate = activity.startDate;
+                    ac.endDate = activity.endDate;
+                    ac.locationPoint = activity.locationPoint;
+                    ac.room = activity.room;
+                    ac.detail = activity.detail;
+
                     j = db.Joins.Find(q[q.Count() - 1].id);
                     j.idTea = activity.teacherInActivity;
-                    db.Entry(activity).State = EntityState.Modified;
+                    db.Entry(ac).State = EntityState.Modified;
                     db.SaveChanges();
                     Activity aa = db.Activitys.Find(activity.id);
                     if (xlnx != null)
