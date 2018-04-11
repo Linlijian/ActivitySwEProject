@@ -91,16 +91,25 @@ namespace AcSwE.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(HttpPostedFileBase file,[Bind(Include = "id,title,firstName,lastName,username,password,status,img")] Teacher teacher)
+        public ActionResult Edit(HttpPostedFileBase file,Teacher teacher)
         {
             if (ModelState.IsValid)
             {
                 if(file == null)
                 {
-                    //teacher.img = "default.jpg";
-                    db.Entry(teacher).State = EntityState.Modified;
+                    Teacher a = db.Teachers.Find(teacher.id);
+                    
+                    a.id = teacher.id;
+                    a.firstName = teacher.firstName;
+                    a.lastName = teacher.lastName;
+                    a.username = teacher.username;
+                    a.password = teacher.password;
+                    a.status = teacher.status;
+                    a.title = teacher.title;
+
+                    db.Entry(a).State = EntityState.Modified;
                     db.SaveChanges();
-                    Session["username"] = teacher.firstName;
+                    Session["username"] = a.firstName;
                     return RedirectToAction("Index");
                 }
                 file.SaveAs(HttpContext.Server.MapPath("~/Content/img/teacher/")
