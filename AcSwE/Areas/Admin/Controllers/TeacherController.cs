@@ -35,12 +35,39 @@ namespace AcSwE.Areas.Admin.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Teacher teacher = db.Teachers.Find(id);
+            Teacher teacher = db.Teachers.Find(id); // id 2           
+            var q = (from a in db.Joins where a.idTea == id select a).ToList();
+            // id = 1107	idstd = 0	idac = 1060	idtea = 2
+            StudentTemp t = new StudentTemp();
+            for (int i = 0; i < q.Count(); i++)
+            {
+                t.idStd = q[i].idActivity;
+                db.StudentTemps.Add(t);
+                db.SaveChanges();
+            }
+
+            ViewBag.T_AC = (from z in db.StudentTemps join x in db.Activitys on z.idStd equals x.id select x).ToList();
+           
+            //del
+            var temp = db.StudentTemps.ToList();
+            StudentTemp std = new StudentTemp();
+            for (int i = 0; i < temp.Count(); i++)
+            {
+                std = db.StudentTemps.Find(temp[i].id);
+                db.StudentTemps.Remove(std);
+                db.SaveChanges();
+            }
+
             if (teacher == null)
             {
                 return HttpNotFound();
             }
             return View(teacher);
+        }
+
+        public ActionResult CallDetails(int ?id)
+        {
+            return RedirectToAction("Details", "Activitie", new { id });
         }
 
         // GET: Admin/Teacher/Create

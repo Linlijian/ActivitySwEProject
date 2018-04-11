@@ -9,9 +9,9 @@
 
 <div class="row alert alert-info">
     <div class="col-md-4 text-center alert alert-success">
-        <img class="card-img-top" src="~/Content/img/teacher/@Html.DisplayFor(model => model.img)" alt="Card image cap" width="52%">
+        <img class="card-img-top" src="~/Content/img/teacher/@Html.DisplayFor(model => model.img)" alt="Card image cap" width="50%">
     </div>
-    <div class="col-md-8  alert alert-success">
+    <div class="col-md-8">
         <div class="align-self-center ">
             <h4>@Html.DisplayNameFor(model => model.title) : @Html.DisplayFor(model => model.title)</h4>
         </div>
@@ -24,6 +24,58 @@
     </div>
 </div>
 
+
+<div class="row alert alert-info">
+    <div class="col-md-12">
+        <h4>Joiner</h4>
+    </div>
+    <table class="table">
+        <tr>
+            <th>
+                <h3>No.</h3>
+            </th>
+
+            <th>
+                <h3>Name</h3>
+            </th>
+
+            <th>
+                <h3>Start</h3>
+            </th>
+            <th>
+                <h3>End</h3>
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var a in ViewBag.T_AC)
+        {
+            <tr>
+                <td>
+                    <h5>@a.id</h5>
+                </td>
+
+                <td>
+                    <h5>@a.activityname</h5>
+                </td>
+
+                <td>
+                    <h5>@a.startDate</h5>
+                </td>
+                <td>
+                    <h5>@a.endDate</h5>
+                </td>
+                @if (@Session["user"] != null)
+                {
+                    <td>                        
+                        @Html.ActionLink("Details", "CallDetails", new { id = @a.id})                       
+                    </td>
+                }
+
+            </tr>
+        }
+    </table>
+</div>
 
     <p>
         @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
