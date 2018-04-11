@@ -47,7 +47,7 @@ namespace AcSwE.Areas.Admin.Controllers
             }
 
             ViewBag.T_AC = (from z in db.StudentTemps join x in db.Activitys on z.idStd equals x.id select x).ToList();
-           
+            ViewBag.count = (from d in db.Joins where teacher.id == d.idTea select d).Count();
             //del
             var temp = db.StudentTemps.ToList();
             StudentTemp std = new StudentTemp();
