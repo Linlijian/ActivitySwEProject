@@ -1,0 +1,109 @@
+﻿@model AcSwE.Models.Activity
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div class="row alert alert-info">
+    <div class="text-center">
+        <img src="~/Content/img/activity/@Html.DisplayFor(model => model.img)" class="img-fluid rounded" alt="Responsive image">
+    </div>
+</div>
+
+<div class="row alert alert-info">
+    <div class="col-md-12">
+        <h4>@Html.DisplayNameFor(model => model.activityname) : @Html.DisplayFor(model => model.activityname)</h4>
+    </div>    
+</div>
+
+<div class="row alert alert-info">
+    <div class="col-md-4">
+        <h4>@Html.DisplayNameFor(model => model.location) : @Html.DisplayFor(model => model.location)</h4>
+    </div>
+    <div class="col-md-4">
+        <h4>@Html.DisplayNameFor(model => model.locationPoint) : @Html.DisplayFor(model => model.locationPoint)</h4>
+    </div>
+    <div class="col-md-4">
+        <h4>@Html.DisplayNameFor(model => model.room) : @Html.DisplayFor(model => model.room)</h4>
+    </div>
+</div>
+
+<div class="row alert alert-info">
+    <div class="col-md-3">
+        <h4>@Html.DisplayNameFor(model => model.yearStd) : @Html.DisplayFor(model => model.yearStd)</h4>
+    </div>
+    <div class="col-md-3">
+        <h4>@Html.DisplayNameFor(model => model.yearStudy) : @Html.DisplayFor(model => model.yearStudy)</h4>
+    </div>
+    <div class="col-md-3">
+        <h4>@Html.DisplayNameFor(model => model.startDate) : @Html.DisplayFor(model => model.startDate)</h4>
+    </div>
+    <div class="col-md-3" >
+        <h4>@Html.DisplayNameFor(model => model.endDate) : @Html.DisplayFor(model => model.endDate)</h4>
+    </div>
+</div>
+
+<div class="row alert alert-info">
+    <div class="col-md-12">
+        <h4>@Html.DisplayNameFor(model => model.teacherInActivity) : @Html.DisplayFor(model => model.teacherInActivity)</h4>
+    </div>
+</div>
+
+<div class="row alert alert-info">
+    <div class="col-md-12">
+        <h4>@Html.DisplayNameFor(model => model.detail) : @Html.DisplayFor(model => model.detail)</h4>
+    </div>
+</div>
+
+<div class="row alert alert-info">
+    <div class="col-md-12">
+        <h4>Joiner</h4>
+    </div>
+    <table class="table">
+        <tr>
+            <th>
+                <h3>Id STD</h3>
+            </th>
+
+            <th>
+                <h3>Full Name</h3>
+            </th>
+
+            <th>
+                <h3>Year</h3>
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var a in ViewBag.std)
+        {
+            <tr>
+                <td>
+                    <h5>@a.idStd</h5>
+                </td>
+
+                <td>
+                    <h5>@a.title@a.firstName @a.lastName</h5>
+                </td>
+
+                <td>
+                    <h5>@a.year</h5>
+                </td>
+                
+                    <td>                      
+                        @Html.ActionLink("Details", "DetailsStd", new { id = @a.id, Acid = ViewBag.acid }) |                        
+                    </td>
+                
+               
+            </tr>
+        }
+    </table>
+</div>
+
+<p>
+   
+    @Html.ActionLink("Back to List", "Index")
+</p>

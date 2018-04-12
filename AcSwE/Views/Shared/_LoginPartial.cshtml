@@ -2,6 +2,8 @@
 <ul class="nav navbar-nav navbar-right">
     @if (@Session["user"] == null)
     {
+        <li><a href="~/Activity/index">Activity</a></li>
+        <li><a href="~/Studented/index">Student</a></li>
         <li><a href="~/home/login">Login</a></li>
     }
     else

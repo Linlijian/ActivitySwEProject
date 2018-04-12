@@ -1,0 +1,87 @@
+﻿@model AcSwE.Models.Student
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div class="row alert alert-info">
+    <div class="col-md-4 text-center alert alert-success">
+        <img class="card-img-top" src="~/Content/img/student/@Html.DisplayFor(model => model.img)" alt="Card image cap" width="50%">
+    </div>
+    <div class="col-md-8">
+        <div class="align-self-center ">
+            <h4>@Html.DisplayNameFor(model => model.idStd) : @Html.DisplayFor(model => model.idStd)</h4>
+            <h4>Full Name : @Html.DisplayFor(model => model.title)@Html.DisplayFor(model => model.firstName) @Html.DisplayFor(model => model.lastName)</h4>
+        </div>
+        <div class="align-self-end ">
+            <h4>@Html.DisplayNameFor(model => model.firstName) : @Html.DisplayFor(model => model.firstName)</h4>
+            <h4>@Html.DisplayNameFor(model => model.lastName) : @Html.DisplayFor(model => model.lastName)</h4>
+            <h4>@Html.DisplayNameFor(model => model.year) : @Html.DisplayFor(model => model.year)</h4>
+            <h4>Count of Join activity : @ViewBag.count</h4>
+        </div>
+    </div>
+</div>
+
+
+<div class="row alert alert-info">
+    <div class="col-md-12">
+        <h4>Joiner</h4>
+    </div>
+    <table class="table">
+        <tr>
+            <th>
+                <h3>No.</h3>
+            </th>
+
+            <th>
+                <h3>Activities Name</h3>
+            </th>
+
+            <th>
+                <h3>Start</h3>
+            </th>
+            <th>
+                <h3>End</h3>
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var a in ViewBag.ST_AC)
+        {
+            <tr>
+                <td>
+                    <h5>@a.id</h5>
+                </td>
+
+                <td>
+                    <h5>@a.activityname</h5>
+                </td>
+
+                <td>
+                    <h5>@a.startDate</h5>
+                </td>
+                <td>
+                    <h5>@a.endDate</h5>
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "CallDetails", new { id = @a.id })
+                </td>
+
+            </tr>
+        }
+    </table>
+</div>
+
+@using (Html.BeginForm("callBack", "Studented", new { baseUrl = ViewBag.url }))
+{
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Back" class="btn btn-default" />
+        </div>
+    </div>
+}
+@*@Html.ActionLink("Back", "Index")*@
+<br>
