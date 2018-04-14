@@ -45,6 +45,7 @@ namespace AcSwE.Models
         [Display(Name = "Detail")]
         public string detail { get; set; }
 
+        public int countStd { get; set; }
         [NotMapped]
         public List<Teacher> TeacherList { get; set; }
     }

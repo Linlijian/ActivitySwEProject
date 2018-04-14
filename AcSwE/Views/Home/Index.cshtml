@@ -6,15 +6,16 @@
 }
 
 
-<h2>@Session["username"]</h2>
-@Html.ActionLink("Login", "Login")
+@*<h2>@Session["username"]</h2>
+@Html.ActionLink("Login", "Login")*@
 
 <div class="container">
 
     <header class="jumbotron my-4">
-        <h1 class="display-3">A Warm Welcome!</h1>
-        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>
-        <a href="#" class="btn btn-primary btn-lg">Call to action!</a>
+        <h1 class="display-3">@if (@Session["user"] != null) { @Session["username"] } Welcome!</h1>
+        <p class="lead">Activities Software Engineering Manager. This web site in Walailak University for 
+            School of Informatics Major's Software Engineering (SwE)</p>
+        <a href="~/Home/login" class="btn btn-primary btn-lg">Login to Manage!</a>
     </header>
 
     <h2>New activity</h2>
@@ -29,7 +30,11 @@
                         <h3>@ViewBag.New[i].activityname</h3>
                         <p>By: @ViewBag.TEA[i].FullName</p>
                         <p>Start: @ViewBag.New[i].startDate || End: @ViewBag.New[i].endDate</p>                        
-                        <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                        <p><a href="~/Activity/Details/@ViewBag.New[i].id" class="btn btn-primary" role="button">View</a> 
+                        @if (@Session["user"] != null)
+                        {
+                            <a href="~/Admin/Activitie/Edit/@ViewBag.New[i].id" class="btn btn-primary" role="button">Edit</a>
+                        }</p>
                     </div>
                 </div>
             </div>
@@ -40,36 +45,25 @@
     <br>
     <h2>TOP 3 Student join activity</h2>
     <div class="row">
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <img src="..." alt="...">
-                <div class="caption">
-                    <h3>Thumbnail label</h3>
-                    <p>...</p>
-                    <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+        @for (int i = 0; i < 3; i++)
+        {
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    <img src="~/Content/img/activity/@ViewBag.COUNT[i].img" alt="Acivity new @i" width="192" height="200">
+                    <div class="caption">
+                        <h3>@ViewBag.COUNT[i].activityname</h3>
+                        <p>By: @ViewBag.TEA[i].FullName</p>
+                        <p>Student join: @ViewBag.COUNT[i].countStd</p>
+                        <p>Start: @ViewBag.COUNT[i].startDate || End: @ViewBag.COUNT[i].endDate</p>
+                        <p>
+                            <a href="~/Activity/Details/@ViewBag.New[i].id" class="btn btn-primary" role="button">View</a>@if (@Session["user"] != null)
+                            {
+                                <a href="~/Admin/Activitie/Edit/@ViewBag.New[i].id" class="btn btn-primary" role="button">Edit</a>
+                            }
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <img src="..." alt="...">
-                <div class="caption">
-                    <h3>Thumbnail label</h3>
-                    <p>...</p>
-                    <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <img src="..." alt="...">
-                <div class="caption">
-                    <h3>Thumbnail label</h3>
-                    <p>...</p>
-                    <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
+        }
 
 </div>

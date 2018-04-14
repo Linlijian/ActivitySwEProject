@@ -14,7 +14,8 @@ namespace AcSwE.Controllers
             ViewBag.New = (from a in db.Activitys orderby a.id descending select a).ToList();
             ViewBag.TEA = (from s in db.Teachers join d in db.Activitys on s.id equals d.teacherInActivity
                            orderby d.id descending select s).ToList();
-            int i = 0;
+            ViewBag.COUNT = (from a in db.Activitys orderby a.countStd descending select a).ToList();
+            int ii = 0;
             return View();
         }
 
