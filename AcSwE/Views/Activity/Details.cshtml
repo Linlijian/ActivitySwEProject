@@ -9,7 +9,7 @@
 
 <div class="row alert alert-info">
     <div class="text-center">
-        <img src="~/Content/img/activity/@Html.DisplayFor(model => model.img)" class="img-fluid rounded" alt="Responsive image">
+        <img src="~/Content/img/activity/@Html.DisplayFor(model => model.img)" width="335" height="248" class="img-fluid rounded" alt="Responsive image">
     </div>
 </div>
 
@@ -48,7 +48,7 @@
 
 <div class="row alert alert-info">
     <div class="col-md-12">
-        <h4>@Html.DisplayNameFor(model => model.teacherInActivity) : @Html.DisplayFor(model => model.teacherInActivity)</h4>
+        <h4>@Html.DisplayNameFor(model => model.teacherInActivity) : @ViewBag.TEA[0].FullName</h4>
     </div>
 </div>
 

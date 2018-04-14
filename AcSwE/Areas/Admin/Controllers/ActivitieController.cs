@@ -42,6 +42,10 @@ namespace AcSwE.Areas.Admin.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            ViewBag.TEA = (from s in db.Teachers
+                           join d in db.Joins on s.id equals d.idTea
+                           where d.idActivity == id
+                           select s).ToList();
             Activity activity = db.Activitys.Find(id);
             var data = (from a in db.Joins where a.idActivity == id select a).ToList();
             StudentTemp t = new StudentTemp();
