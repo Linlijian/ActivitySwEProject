@@ -96,6 +96,7 @@ namespace AcSwE.Areas.Admin.Controllers
 
             if (Edit != 0)
             {
+
                 var data2 = (from a in db.Joins join ss in db.StudentTemps on a.idStd equals ss.idStd where a.idActivity == Edit select ss).ToList();
                 //del equals
                 for (int i = 0; i < data2.Count(); i++)
@@ -104,6 +105,29 @@ namespace AcSwE.Areas.Admin.Controllers
                     db.StudentTemps.Remove(t);
                     db.SaveChanges();
                 }
+                //try
+                //{
+                //    var data2 = (from a in db.Joins join ss in db.StudentTemps on a.idStd equals ss.idStd where a.idActivity == Edit select ss).ToList();
+                //    //del equals
+                //    for (int i = 0; i < data2.Count(); i++)
+                //    {
+                //        StudentTemp t = db.StudentTemps.Find(data2[i].id);
+                //        db.StudentTemps.Remove(t);
+                //        db.SaveChanges();
+                //    }
+                //}
+                //catch (Exception)
+                //{
+                //    var temp = db.StudentTemps.ToList();
+                //    for (int i = 0; i < temp.Count(); i++)
+                //    {
+                //        StudentTemp tempStd = db.StudentTemps.Find(temp[i].id);
+                //        db.StudentTemps.Remove(tempStd);
+                //        db.SaveChanges();
+                //    }
+                //    return;
+                //}
+                
             }
             var data = (from a in db.Students
                         join b in db.StudentTemps
@@ -336,11 +360,11 @@ namespace AcSwE.Areas.Admin.Controllers
      Request.ApplicationPath.TrimEnd('/') + "/" + "Admin/Activitie/EditStd/" + Acid;
             return RedirectToAction("Details", "Student", new { id, baseUrl });
         }
-        public ActionResult DeleteStd(int? id, int Acid)
+        public ActionResult DeleteStd(int? id, int Acid,int idstd)
         {
             string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority +
      Request.ApplicationPath.TrimEnd('/') + "/" + "Admin/Activitie/EditStd/" + Acid;
-            return RedirectToAction("del", "Student", new { id, baseUrl });
+            return RedirectToAction("del", "Student", new { id, baseUrl,Acid , idstd });
         }
 
         // GET: Admin/Activitie/Delete/5

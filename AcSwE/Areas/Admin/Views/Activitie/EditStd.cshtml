@@ -40,7 +40,7 @@
             <td>
                 @Html.ActionLink("Edit", "EditStds", new { id = @a.id , Acid = ViewBag.acid }) |
                 @Html.ActionLink("Details", "DetailsStd", new { id = @a.id, Acid = ViewBag.acid }) |
-                @Html.ActionLink("Delete", "DeleteStd", new { id = @a.id, Acid = ViewBag.acid })
+                @Html.ActionLink("Delete", "DeleteStd", new { id = @a.id, Acid = ViewBag.acid, idstd = @a.idStd})
             </td>
         </tr>
     }

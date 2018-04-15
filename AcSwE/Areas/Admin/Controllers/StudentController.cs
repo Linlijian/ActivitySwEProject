@@ -188,10 +188,25 @@ namespace AcSwE.Areas.Admin.Controllers
             base.Dispose(disposing);
         }
 
-        public ActionResult del(int id,string baseUrl)
+        public ActionResult del(int id,string baseUrl,int Acid, int idstd)
         {
-            Student student = db.Students.Find(id);
-            db.Students.Remove(student);
+            //Student student = db.Students.Find(id);
+            var j = (from d in db.Joins where Acid == d.idActivity select d).ToList();
+            for (int i = 0; i < j.Count(); i++)
+            {
+                if (idstd == j[i].idStd)
+                {
+                    Join jj = db.Joins.Find(j[i].id);
+                    db.Joins.Remove(jj);
+                    break;
+                }
+            }
+           // db.Students.Remove(student);            
+            db.SaveChanges();
+            Activity a = db.Activitys.Find(Acid);            
+            a.countStd = (from xx in db.Joins where xx.idActivity == Acid select xx).Count();
+            a.countStd -= 1;
+            db.Entry(a).State = EntityState.Modified;
             db.SaveChanges();
             return Redirect(baseUrl);
         }
