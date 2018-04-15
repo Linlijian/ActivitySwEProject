@@ -22,7 +22,9 @@ namespace AcSwE.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl);
             }
             ViewBag.TEA = (from s in db.Teachers
                            join d in db.Joins on s.id equals d.idTea

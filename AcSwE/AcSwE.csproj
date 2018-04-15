@@ -206,6 +206,7 @@
     <Compile Include="Areas\Admin\Controllers\StudentController.cs" />
     <Compile Include="Areas\Admin\Controllers\TeacherController.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StudentedController.cs" />
     <Compile Include="Extensions\ListTeacher.cs" />
@@ -227,6 +228,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\img\activity\default.jpg" />
+    <Content Include="Content\img\err\badrequest.png" />
+    <Content Include="Content\img\err\pagenotfound.png" />
     <Content Include="Content\img\teacher\default.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -296,6 +299,8 @@
     <Content Include="Views\Activity\Details.cshtml" />
     <Content Include="Views\Studented\Index.cshtml" />
     <Content Include="Views\Studented\Details.cshtml" />
+    <Content Include="Views\Error\BadRequest.cshtml" />
+    <Content Include="Views\Error\PageNotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

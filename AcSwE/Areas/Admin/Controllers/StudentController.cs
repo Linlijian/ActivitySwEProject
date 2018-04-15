@@ -25,7 +25,9 @@ namespace AcSwE.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1);
             }
             Student student = db.Students.Find(id);
             ViewBag.count = (from a in db.Joins where student.idStd == a.idStd select a).Count();
@@ -51,7 +53,9 @@ namespace AcSwE.Areas.Admin.Controllers
 
             if (student == null)
             {
-                return HttpNotFound();
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/PageNotFound/";
+                return Redirect(baseUrl1);
             }
             ViewBag.url = baseUrl;
             //if (baseUrl != null)
@@ -107,12 +111,16 @@ namespace AcSwE.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1);
             }
             Student student = db.Students.Find(id);
             if (student == null)
             {
-                return HttpNotFound();
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/PageNotFound/";
+                return Redirect(baseUrl1);
             }
             ViewBag.baseUrl = baseUrl;
             return View(student);
@@ -158,12 +166,16 @@ namespace AcSwE.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1);
             }
             Student student = db.Students.Find(id);
             if (student == null)
             {
-                return HttpNotFound();
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/PageNotFound/";
+                return Redirect(baseUrl1);
             }
             return View(student);
         }

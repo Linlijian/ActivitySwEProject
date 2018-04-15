@@ -33,7 +33,9 @@ namespace AcSwE.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1);
             }
             Teacher teacher = db.Teachers.Find(id); // id 2           
             var q = (from a in db.Joins where a.idTea == id select a).ToList();
@@ -60,7 +62,9 @@ namespace AcSwE.Areas.Admin.Controllers
 
             if (teacher == null)
             {
-                return HttpNotFound();
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/PageNotFound/";
+                return Redirect(baseUrl1);
             }
             return View(teacher);
         }
@@ -106,12 +110,16 @@ namespace AcSwE.Areas.Admin.Controllers
         {            
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1);
             }
             Teacher teacher = db.Teachers.Find(id);
             if (teacher == null)
             {
-                return HttpNotFound();
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                 Request.ApplicationPath.TrimEnd('/') + "/" + "Error/PageNotFound/";
+                return Redirect(baseUrl1);
             }
             return View(teacher);
         }
@@ -162,12 +170,16 @@ namespace AcSwE.Areas.Admin.Controllers
             }
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1); ;
             }
             Teacher teacher = db.Teachers.Find(id);
             if (teacher == null)
             {
-                return HttpNotFound();
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/PageNotFound/";
+                return Redirect(baseUrl1);
             }
             return View(teacher);
         }

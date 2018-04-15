@@ -40,7 +40,9 @@ namespace AcSwE.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1);
             }
             ViewBag.TEA = (from s in db.Teachers
                            join d in db.Joins on s.id equals d.idTea
@@ -70,7 +72,9 @@ namespace AcSwE.Areas.Admin.Controllers
             }
             if (activity == null)
             {
-                return HttpNotFound();
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/PageNotFound/";
+                return Redirect(baseUrl1);
             }
             return View(activity);
         }
@@ -248,13 +252,19 @@ namespace AcSwE.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1);
             }
             Activity activity = db.Activitys.Find(id);
             activity.TeacherList = db.Teachers.ToList<Teacher>();
             if (activity == null)
             {
-                return HttpNotFound();
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/PageNotFound/";
+                return Redirect(baseUrl1);
+
+
             }
             return View(activity);
         }
@@ -324,6 +334,12 @@ namespace AcSwE.Areas.Admin.Controllers
 
         public ActionResult EditStd(int? id)
         {
+            if (id == null)
+            {
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1);
+            }
             var data = (from a in db.Joins where a.idActivity == id select a).ToList();
             StudentTemp t = new StudentTemp();
             for (int i = 0; i < data.Count(); i++)
@@ -372,12 +388,16 @@ namespace AcSwE.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/PageNotFound/";
+                return Redirect(baseUrl1);
             }
             Activity activity = db.Activitys.Find(id);
             if (activity == null)
             {
-                return HttpNotFound();
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/PageNotFound/";
+                return Redirect(baseUrl1);
             }
             return View(activity);
         }
@@ -386,7 +406,7 @@ namespace AcSwE.Areas.Admin.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
-        {
+        {      
             Activity activity = db.Activitys.Find(id);
             db.Activitys.Remove(activity);
             db.SaveChanges();
