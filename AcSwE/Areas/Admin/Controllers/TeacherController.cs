@@ -69,7 +69,7 @@ namespace AcSwE.Areas.Admin.Controllers
             return View(teacher);
         }
 
-        public ActionResult CallDetails(int ?id)
+        public ActionResult CallDetails(int? id)
         {
             return RedirectToAction("Details", "Activitie", new { id });
         }
@@ -78,11 +78,11 @@ namespace AcSwE.Areas.Admin.Controllers
         public ActionResult Create()
         {
             return View();
-        }      
-    
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(HttpPostedFileBase file,Teacher teacher)
+        public ActionResult Create(HttpPostedFileBase file, Teacher teacher)
         {
             if (ModelState.IsValid)
             {
@@ -99,7 +99,7 @@ namespace AcSwE.Areas.Admin.Controllers
                 teacher.img = file.FileName;
                 db.Teachers.Add(teacher);
                 db.SaveChanges();
-                
+
             }
             return RedirectToAction("Index", "Teacher");
             //return View(teacher);
@@ -107,7 +107,7 @@ namespace AcSwE.Areas.Admin.Controllers
 
         // GET: Admin/Teacher/Edit/5
         public ActionResult Edit(int? id)
-        {            
+        {
             if (id == null)
             {
                 string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
@@ -126,14 +126,14 @@ namespace AcSwE.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(HttpPostedFileBase file,Teacher teacher)
+        public ActionResult Edit(HttpPostedFileBase file, Teacher teacher)
         {
             if (ModelState.IsValid)
             {
-                if(file == null)
+                if (file == null)
                 {
                     Teacher a = db.Teachers.Find(teacher.id);
-                    
+
                     a.id = teacher.id;
                     a.firstName = teacher.firstName;
                     a.lastName = teacher.lastName;

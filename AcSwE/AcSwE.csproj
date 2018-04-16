@@ -230,6 +230,8 @@
     <Content Include="Content\img\activity\default.jpg" />
     <Content Include="Content\img\err\badrequest.png" />
     <Content Include="Content\img\err\pagenotfound.png" />
+    <Content Include="Content\img\pdf\logo.png" />
+    <Content Include="Content\img\pdf\logoinfor.png" />
     <Content Include="Content\img\teacher\default.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -265,6 +267,7 @@
     <Content Include="Areas\Admin\Views\Student\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Student\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Teacher\Edit.cshtml" />
+    <Content Include="ClassDiagram1.cd" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
