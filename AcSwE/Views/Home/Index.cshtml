@@ -20,7 +20,7 @@
         <h1 class="display-3">@if (@Session["user"] != null) { @Session["username"] } Welcome!</h1>
         <p class="lead">Activities Software Engineering Manager. This web site in Walailak University for 
             School of Informatics Major's Software Engineering (SwE)</p> 
-        <a href="~/Admin/Manager/GetPDF/" class="btn btn-primary btn-lg">Manage!</a>   
+        @*<a href="~/Admin/Manager/GetPDF/" class="btn btn-primary btn-lg">Manage!</a>*@   
         @if (@Session["user"] != null)
         {
             <a href="~/Admin/Manager" class="btn btn-primary btn-lg">Manage!</a>

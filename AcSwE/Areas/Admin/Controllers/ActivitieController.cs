@@ -408,6 +408,12 @@ namespace AcSwE.Areas.Admin.Controllers
         public ActionResult DeleteConfirmed(int id)
         {      
             Activity activity = db.Activitys.Find(id);
+            var j = (from a in db.Joins where a.idActivity == id select a).ToList();
+            for (int i = 0; i < j.Count(); i++)
+            {
+                db.Joins.Remove(j[i]);
+                db.SaveChanges();
+            }
             db.Activitys.Remove(activity);
             db.SaveChanges();
             return RedirectToAction("Index");

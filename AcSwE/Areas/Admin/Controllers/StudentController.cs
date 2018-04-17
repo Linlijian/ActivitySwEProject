@@ -29,6 +29,12 @@ namespace AcSwE.Areas.Admin.Controllers
                 Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
                 return Redirect(baseUrl1);
             }
+            if (baseUrl == null)
+            {
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1);
+            }
             Student student = db.Students.Find(id);
             ViewBag.count = (from a in db.Joins where student.idStd == a.idStd select a).Count();
             var data = (from s in db.Joins where s.idStd == student.idStd select s).ToList();
@@ -186,6 +192,21 @@ namespace AcSwE.Areas.Admin.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Student student = db.Students.Find(id);
+
+            //search joiner
+            var joiner = (from a in db.Joins where a.idStd == student.idStd select a).ToList();
+
+            //search ac in join
+            for (int i = 0; i < joiner.Count(); i++)
+            {
+                int k = joiner[i].idActivity;
+                var acj = (from s in db.Activitys where k == s.id select s).ToList();
+                acj[0].countStd -= 1;
+                db.Entry(acj[0]).State = EntityState.Modified;
+                db.Joins.Remove(joiner[i]);
+                db.SaveChanges();
+            }
+            
             db.Students.Remove(student);
             db.SaveChanges();
             return RedirectToAction("Index");

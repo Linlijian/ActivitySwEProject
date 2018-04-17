@@ -18,6 +18,18 @@ namespace AcSwE.Areas.Admin.Controllers
         // GET: Admin/Teacher
         public ActionResult Index()
         {
+            if (Session["status"] == null)
+            {
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1);
+            }
+            if (Session["uel"] == null)
+            {
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1);
+            }
             var a = Session["status"];
             var aa = Session["uel"];
             string url = (string)(aa);
@@ -161,6 +173,18 @@ namespace AcSwE.Areas.Admin.Controllers
         // GET: Admin/Teacher/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (Session["status"] == null)
+            {
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1);
+            }
+            if (Session["uel"] == null)
+            {
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1);
+            }
             var a = Session["status"];
             var aa = Session["uel"];
             string url = (string)(aa);
@@ -190,6 +214,25 @@ namespace AcSwE.Areas.Admin.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Teacher teacher = db.Teachers.Find(id);
+
+            //search teacher
+            var joiner = (from a in db.Joins where a.idTea == teacher.id select a).ToList();
+
+            //search ac in join
+            for (int i = 0; i < joiner.Count(); i++)
+            {
+                int h = joiner[i].idActivity;
+                var acj = (from s in db.Activitys where h == s.id select s).ToList();
+                h = acj[i].id;
+                var std = (from d in db.Joins where h == d.idActivity select d).ToList();
+                for (int j = 0; j < std.Count(); j++)
+                {
+                    db.Joins.Remove(std[j]);
+                }
+                db.Activitys.Remove(acj[0]);
+                db.SaveChanges();
+            }
+
             db.Teachers.Remove(teacher);
             db.SaveChanges();
             return RedirectToAction("Index", "Teacher");
