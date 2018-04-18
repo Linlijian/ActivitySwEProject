@@ -13,6 +13,7 @@ using AcSwE.Extensions;
 using System.Data.SqlClient;
 using System.Data.OleDb;
 using System.Configuration;
+using System.Text.RegularExpressions;
 
 namespace AcSwE.Areas.Admin.Controllers
 {
@@ -35,6 +36,38 @@ namespace AcSwE.Areas.Admin.Controllers
             return View(db.Activitys.ToList());
         }
 
+        [HttpGet,ActionName("Index")]
+        public ActionResult Search(string word)
+        {
+            //check int or str            
+            if (word != null)
+            {
+                //convert str to int
+                int number;
+                Int32.TryParse(word, out number);
+                //search
+                bool allDigits = word.All(char.IsDigit);
+                if (allDigits)
+                {
+                    return View(db.Activitys.Where(x => x.yearStd == number ||
+                                word == null || x.yearStudy == number || x.countStd == number).ToList());
+                }
+                else
+                {
+                    return View(db.Activitys.Where(x => x.activityname.Contains(word) ||
+                                word == null || x.detail.Contains(word) || x.endDate.Contains(word)
+                                || x.startDate.Contains(word) || x.location.Contains(word) ||
+                                x.locationPoint.Contains(word) || x.room.Contains(word)).ToList());
+                    //return View(db.Activitys.Where(x => x.activityname.StartsWith(word) ||
+                    //            word == null || x.detail.StartsWith(word) || x.endDate.StartsWith(word)
+                    //            || x.startDate.StartsWith(word) || x.location.StartsWith(word) ||
+                    //            x.locationPoint.StartsWith(word) || x.room.StartsWith(word)).ToList());
+                }
+
+            }
+            return View(db.Activitys.ToList());
+        }
+
         // GET: Admin/Activitie/Details/5
         public ActionResult Details(int? id)
         {
@@ -49,6 +82,9 @@ namespace AcSwE.Areas.Admin.Controllers
                            where d.idActivity == id
                            select s).ToList();
             Activity activity = db.Activitys.Find(id);
+            string replaceWith = " ";
+            string detail = activity.detail.ToString();
+            ViewBag.result = Regex.Replace(detail, @"\r\n?|\n", replaceWith);
             var data = (from a in db.Joins where a.idActivity == id select a).ToList();
             StudentTemp t = new StudentTemp();
             for (int i = 0; i < data.Count(); i++)

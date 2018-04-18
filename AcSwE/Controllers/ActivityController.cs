@@ -16,7 +16,37 @@ namespace AcSwE.Controllers
         {
             return View(db.Activitys.ToList());
         }
+        [HttpGet, ActionName("Index")]
+        public ActionResult Search(string word)
+        {
+            //check int or str            
+            if (word != null)
+            {
+                //convert str to int
+                int number;
+                Int32.TryParse(word, out number);
+                //search
+                bool allDigits = word.All(char.IsDigit);
+                if (allDigits)
+                {
+                    return View(db.Activitys.Where(x => x.yearStd == number ||
+                                word == null || x.yearStudy == number || x.countStd == number).ToList());
+                }
+                else
+                {
+                    return View(db.Activitys.Where(x => x.activityname.Contains(word) ||
+                                word == null || x.detail.Contains(word) || x.endDate.Contains(word)
+                                || x.startDate.Contains(word) || x.location.Contains(word) ||
+                                x.locationPoint.Contains(word) || x.room.Contains(word)).ToList());
+                    //return View(db.Activitys.Where(x => x.activityname.StartsWith(word) ||
+                    //            word == null || x.detail.StartsWith(word) || x.endDate.StartsWith(word)
+                    //            || x.startDate.StartsWith(word) || x.location.StartsWith(word) ||
+                    //            x.locationPoint.StartsWith(word) || x.room.StartsWith(word)).ToList());
+                }
 
+            }
+            return View(db.Activitys.ToList());
+        }
         // GET: Activity/Details/5
         public ActionResult Details(int ?id)
         {

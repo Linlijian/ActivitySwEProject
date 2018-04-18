@@ -40,6 +40,51 @@ namespace AcSwE.Areas.Admin.Controllers
             return View(db.Teachers.ToList());
         }
 
+        [HttpGet, ActionName("Index")]
+        public ActionResult Search(string word)
+        {
+            //check int or str            
+            if (word != null)
+            {
+                //convert str to int
+                int number;
+                Int32.TryParse(word, out number);
+                //search
+                bool allDigits = word.All(char.IsDigit);
+                if (!allDigits)
+                {
+                    return View(db.Teachers.Where(x => x.username.Contains(word) ||
+                                word == null || x.firstName.Contains(word) || x.lastName.Contains(word)
+                                || x.title.Contains(word)).ToList());
+                    //return View(db.Activitys.Where(x => x.activityname.StartsWith(word) ||
+                    //            word == null || x.detail.StartsWith(word) || x.endDate.StartsWith(word)
+                    //            || x.startDate.StartsWith(word) || x.location.StartsWith(word) ||
+                    //            x.locationPoint.StartsWith(word) || x.room.StartsWith(word)).ToList());
+                }
+
+            }
+            if (Session["status"] == null)
+            {
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1);
+            }
+            if (Session["uel"] == null)
+            {
+                string baseUrl1 = Request.Url.Scheme + "://" + Request.Url.Authority +
+                Request.ApplicationPath.TrimEnd('/') + "/" + "Error/BadRequest/";
+                return Redirect(baseUrl1);
+            }
+            var a = Session["status"];
+            var aa = Session["uel"];
+            string url = (string)(aa);
+            if (a == null)
+            {
+                return Redirect(url);
+            }
+            return View(db.Teachers.ToList());
+        }
+
         // GET: Admin/Teacher/Details/5
         public ActionResult Details(int? id)
         {

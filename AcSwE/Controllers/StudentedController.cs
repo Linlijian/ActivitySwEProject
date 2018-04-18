@@ -18,6 +18,36 @@ namespace AcSwE.Controllers
             return View(db.Students.ToList());
         }
 
+        [HttpGet, ActionName("Index")]
+        public ActionResult Search(string word)
+        {
+            //check int or str            
+            if (word != null)
+            {
+                //convert str to int
+                int number;
+                Int32.TryParse(word, out number);
+                //search
+                bool allDigits = word.All(char.IsDigit);
+                if (allDigits)
+                {
+                    return View(db.Students.Where(x => x.idStd == number).ToList());
+                }
+                else
+                {
+                    return View(db.Students.Where(x => x.year.Contains(word) ||
+                                word == null || x.firstName.Contains(word) || x.lastName.Contains(word)
+                                || x.title.Contains(word)).ToList());
+                    //return View(db.Activitys.Where(x => x.activityname.StartsWith(word) ||
+                    //            word == null || x.detail.StartsWith(word) || x.endDate.StartsWith(word)
+                    //            || x.startDate.StartsWith(word) || x.location.StartsWith(word) ||
+                    //            x.locationPoint.StartsWith(word) || x.room.StartsWith(word)).ToList());
+                }
+
+            }
+            return View(db.Students.ToList());
+        }
+
         public ActionResult Details(string baseUrl, int? id)
         {
             if (id == null)
